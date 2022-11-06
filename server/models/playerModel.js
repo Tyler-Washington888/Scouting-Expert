@@ -26,7 +26,7 @@ const playerSchema = mongoose.Schema(
             age: {
                 type: Number, 
                 required: true
-            }, 
+            },  
             year: {
                 type: String, 
                 required: true, 
@@ -72,7 +72,7 @@ const playerSchema = mongoose.Schema(
                 required: true,
             },
         }, 
-        comparisons: [String], 
+        comparisons: [String],
         overview: String,
         strengths: [String],
         weaknesses: String

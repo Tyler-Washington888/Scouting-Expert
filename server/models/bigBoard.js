@@ -15,3 +15,5 @@ const bigBoardSchema = mongoose.Schema(
         rankings: [{type: mongoose.Schema.type.ObjectId, ref: 'Player'}]
     }
 )
+
+module.exports = mongoose.Model("bigBoard", bigBoardSchema)
