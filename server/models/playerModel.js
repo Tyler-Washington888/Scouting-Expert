@@ -73,9 +73,12 @@ const playerSchema = mongoose.Schema(
             },
         }, 
         comparisons: [String], 
-        overview: String, 
-        strengths: [String], 
+        overview: String,
+        strengths: [String],
         weaknesses: String
+    },
+    {
+        timestamp: true 
     }
 )
 
