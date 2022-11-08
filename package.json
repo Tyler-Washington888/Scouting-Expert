@@ -4,7 +4,7 @@
   "description": "Mock Draft website",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js", 
+    "start": "node server/index.js",
     "server": "nodemon server/index.js"
   },
   "repository": {
@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/Tyler-Washington888/Scouting-Expert#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.7"
   },
   "devDependencies": {
