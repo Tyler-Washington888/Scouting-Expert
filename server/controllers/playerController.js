@@ -83,25 +83,99 @@ const createPlayer = asyncHandler(async (req, res) => {
       }
 })
 
-
+// @desc  Get player
+// @route GET /players
+// @access Public
 const getPlayer = asyncHandler(async(req, res) => {
     const {firstName, lastName, year} = req.body
 
      //search for player
      const player = await Player.findOne({"personal.name.first": firstName, "personal.name.last": lastName, "personal.year": year});
   
-     if (player) {
+     if (player){
        res.status(200).json(player);
      }else{
         res.status(400);
-        throw new Error("This player does not exist");
+        throw new Error("Player not found");
      }
 })
 
-// @desc  Get player
-// @route GET /players
+// @desc Update player 
+// @route PUT /players/:id
 // @access Public
+const updatePlayer = asyncHandler(async (req, res) => {
+    const player = await Player.findById(req.params.id)
+
+    if(!player){
+        res.status(400)
+        throw new Error("Player not found")
+    }
+
+    const {creatorId, firstName, lastName, image, age, year, team, height, weight, position, points, rebounds, assists, blocks, threePointer,  
+        comparisons, overview, strengths, weaknesses} = req.body
+
+    if (!creatorId || !firstName || !lastName || !image || !age || !year || !team || !height || 
+        !weight || !position || !points || !rebounds || !assists || !blocks || !threePointer || !comparisons || 
+        !overview || !strengths || !weaknesses ) {
+        res.status(400);
+        throw new Error("Please add all fields");
+    }
+
+    const updatedPlayer = await Player.findByIdAndUpdate(req.params.id, {
+        creatorId,
+        personal: {
+            name: {
+                first: firstName,
+                last: lastName
+            },
+            image,
+            age,
+            year,
+            team,
+            measureables: {
+                height, 
+                weight
+            },
+            position
+        },
+        stats: {
+            points,
+            rebounds,
+            assists, 
+            blocks, 
+            threePointer,
+        },
+        comparisons,
+        overview,
+        strengths,
+        weaknesses
+    }, {
+        new: true,
+    });
+
+    res.status(200).json(updatedPlayer);
+})
+
+// @desc Delete player 
+// @route DELETE /players/:id
+// @access Public
+const deletePlayer = asyncHandler(async (req, res) => {
+    const player = await Player.findById(req.params.id)
+
+     // check for user
+    if(!player){
+        res.status(400)
+        throw new Error("Player not found")
+    }
+    
+    await player.remove();
+  
+    res.status(200).json({ id: req.params.id });
+})
+
 module.exports = {
     createPlayer,
-    getPlayer
+    getPlayer, 
+    updatePlayer,
+    deletePlayer
 }
