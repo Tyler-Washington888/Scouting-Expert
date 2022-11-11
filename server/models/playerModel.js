@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 
 const playerSchema = mongoose.Schema(
     {
-        creator: {
-            type: mongoose.Schema.type.ObjectId 
+        creatorId: {
+            type: mongoose.Schema.Types.ObjectId,
             required : true, 
             ref: 'User'
-        }, 
+        },
         personal: {
             name: {
                 first: {
@@ -20,9 +20,9 @@ const playerSchema = mongoose.Schema(
                 },
             },
             image: {
-                type: string, 
+                type: String, 
                 required: true
-            }
+            },
             age: {
                 type: Number, 
                 required: true
@@ -32,10 +32,10 @@ const playerSchema = mongoose.Schema(
                 required: true, 
             },
             team: {
-                type: string, 
+                type: String, 
                 required: true 
             },
-            measurables:{
+            measureables:{
                 height: {
                     type: Number, 
                     required: true,
@@ -46,7 +46,7 @@ const playerSchema = mongoose.Schema(
                 },
             }, 
             position: {
-                type: string, 
+                type: String, 
                 required: true
             }
         },
