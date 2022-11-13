@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/users", require("./routes/userRoutes"));
 app.use("/players", require("./routes/playerRoutes"));
+app.use("/bigBoards", require("./routes/bigBoardRoutes"));
 
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
