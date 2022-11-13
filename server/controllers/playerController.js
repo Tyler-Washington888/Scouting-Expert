@@ -81,7 +81,7 @@ const createPlayer = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Invalid player data");
       }
-})
+});
 
 // @desc  Get player
 // @route GET /players
@@ -98,7 +98,7 @@ const getPlayer = asyncHandler(async(req, res) => {
         res.status(400);
         throw new Error("Player not found");
      }
-})
+});
 
 // @desc Update player 
 // @route PUT /players/:id
@@ -154,7 +154,7 @@ const updatePlayer = asyncHandler(async (req, res) => {
     });
 
     res.status(200).json(updatedPlayer);
-})
+});
 
 // @desc Delete player 
 // @route DELETE /players/:id
@@ -167,11 +167,11 @@ const deletePlayer = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Player not found")
     }
-    
+
     await player.remove();
   
     res.status(200).json({ id: req.params.id });
-})
+});
 
 module.exports = {
     createPlayer,
