@@ -12,7 +12,7 @@ const createBigBoard = asyncHandler (async (req, res) => {
 
     if (!creatorId || !year || !rankings){
         res.status(400)
-        throw new Error("Please add all fields")
+        throw new Error("Please add all required fields")
     }
 
     const duplicate = await bigBoard.findOne({year})
