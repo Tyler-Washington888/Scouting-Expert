@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const Player = require('../models/playerModel')
-const bigBoard = require('../models/bigBoard')
+const bigBoard = require('../models/bigBoardModel')
 const asyncHandler = require("express-async-handler");
 
 
@@ -24,10 +24,10 @@ const createBigBoard = asyncHandler (async (req, res) => {
 
      // Create Big Board
      const newBigBoard = await bigBoard.create({
-        creatorId
+        creatorId,
         year,
         rankings,
-      });
+    });
 
     if (newBigBoard) {
         res.status(200).json({newBigBoard});
@@ -38,10 +38,51 @@ const createBigBoard = asyncHandler (async (req, res) => {
 });
 
 // @desc Update big board 
-// @route PUT /bigBoards/:id/players/:id
+// @route PUT /bigBoards/:bb_id/players/:id
 // @access Public
 const updateBigBoard = asyncHandler ( async(req, res,) => {
-    console.log('update bigBoard')
+    const bBoard = await bigBoard.findById(req.params.bb_id);
+    const player = await Player.findById(req.params.id);
+    const {rank} = req.body
+
+    if(!bBoard){
+        res.status(400)
+        throw new Error('Big board not found');
+    };
+
+    if(!player){
+        res.status(400)
+        throw new Error('Player not found');
+    };
+
+    if(!rank){
+        res.status(400)
+        throw new Error('Player include desired player ranking');
+    }
+
+    // if players exists in rankings array delete them 
+    for (let i = 0 ; i < bBoard.rankings.length; i++){
+        if (bBoard.rankings[i].ObjectId == player._id){
+            bBoard.rankings.splice(i, 1);
+            return;
+        }
+    };
+
+    // add player to rankings array based on new ranking
+    if (rank >= bBoard.rankings.length){
+         bBoard.rankings.push(player)
+    }else {
+        bBoard.rankings.splice(rank, 0, player)
+    }
+
+    const updatedBBoard = await bigBoard.findByIdAndUpdate(req.params.bb_id, {bBoard}, {new: true})
+
+    if(updatedBBoard){
+        res.status(200).json({updatedBBoard});
+    }else{
+        res.status(400);
+        throw new Error("Invalid Big Board data");
+    }
 });
 
 module.exports = {
