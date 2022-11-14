@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const Player = require('../models/playerModel')
-const bigBoard = require('../models/bigBoardModel')
+const BigBoard = require('../models/bigBoardModel')
 const asyncHandler = require("express-async-handler");
 
 
@@ -10,12 +10,12 @@ const asyncHandler = require("express-async-handler");
 const createBigBoard = asyncHandler (async (req, res) => {
     const {creatorId, year, rankings} = req.body
 
-    if (!creatorId || !year || !rankings){
+    if (!creatorId || !year){
         res.status(400)
         throw new Error("Please add all required fields")
     }
 
-    const duplicate = await bigBoard.findOne({year})
+    const duplicate = await BigBoard.findOne({year})
 
     if (duplicate){
         res.status(400)
@@ -23,10 +23,10 @@ const createBigBoard = asyncHandler (async (req, res) => {
     }
 
      // Create Big Board
-     const newBigBoard = await bigBoard.create({
+     const newBigBoard = await BigBoard.create({
         creatorId,
         year,
-        rankings,
+        rankings: []
     });
 
     if (newBigBoard) {
@@ -40,50 +40,97 @@ const createBigBoard = asyncHandler (async (req, res) => {
 // @desc Update big board 
 // @route PUT /bigBoards/:bb_id/players/:id
 // @access Public
-const updateBigBoard = asyncHandler ( async(req, res,) => {
-    const bBoard = await bigBoard.findById(req.params.bb_id);
-    const player = await Player.findById(req.params.id);
-    const {rank} = req.body
 
-    if(!bBoard){
-        res.status(400)
-        throw new Error('Big board not found');
-    };
+async function callBigBoard (bigBoardId, playerId, rank) {
+    const bBoard = await BigBoard.findById(bigBoardId);
+    const player = await Player.findById(playerId);
 
-    if(!player){
-        res.status(400)
-        throw new Error('Player not found');
-    };
+    // catch errors
+    if(!player || !bBoard){
+        console.log({
+            bBoard,
+            player, 
+        });
 
-    if(!rank){
-        res.status(400)
-        throw new Error('Player include desired player ranking');
+        return {
+            status: false, 
+            rankings: []
+        }
     }
 
     // if players exists in rankings array delete them 
     for (let i = 0 ; i < bBoard.rankings.length; i++){
-        if (bBoard.rankings[i].ObjectId == player._id){
+        if (bBoard.rankings[i].toString() == player._id.toString()){
             bBoard.rankings.splice(i, 1);
-            return;
         }
     };
 
     // add player to rankings array based on new ranking
     if (rank >= bBoard.rankings.length){
          bBoard.rankings.push(player)
-    }else {
+    }else{
         bBoard.rankings.splice(rank, 0, player)
-    }
+    };
 
-    const updatedBBoard = await bigBoard.findByIdAndUpdate(req.params.bb_id, {bBoard}, {new: true})
+    const updatedBBoard = await BigBoard.findByIdAndUpdate(bigBoardId, {
+        creatorId: bBoard.creatorId, 
+        year: bBoard.year, 
+        rankings: bBoard.rankings
+    }, 
+    {new: true})
 
     if(updatedBBoard){
-        res.status(200).json({updatedBBoard});
+        return {
+            status: true, 
+            rankings: updatedBBoard.rankings
+        }
     }else{
-        res.status(400);
-        throw new Error("Invalid Big Board data");
+        console.log('Big board failed to update')
+        return {
+            status: false, 
+            rankings: bBoard.rankings
+        }
     }
-});
+}
+
+const updateBigBoard = asyncHandler ( async(req, res,) => {
+
+    let rank = parseInt(req.body.rank)
+  
+    console.log(rank, req.body.rank)
+
+    if(isNaN(rank)){ 
+        console.log('here')
+        res.status(400)
+        throw new Error("Rank is not a number")
+    }
+
+    rank--
+
+    if(rank < 0){
+        rank = 0
+    }
+
+    const bigBoardRankings = await callBigBoard(req.params.bb_id, req.params.id, rank)
+
+    if(!bigBoardRankings.status){
+        res.status(400)
+        throw new Error('Error connecting to database')
+    }
+
+    const playerObjects = bigBoardRankings.rankings.map( async playerId => await Player.findById(playerId))
+
+    Promise.all(playerObjects).then(players => {
+        const filteredPlayers = players.filter(player => player)
+
+        if(!filteredPlayers.length){
+            res.status(400)
+            throw new Error('Error connecting to not database')
+        }
+
+        res.status(200).json({rankings: filteredPlayers})
+    }) 
+})
 
 module.exports = {
     createBigBoard, 

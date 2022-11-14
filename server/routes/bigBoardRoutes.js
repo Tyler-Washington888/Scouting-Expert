@@ -4,7 +4,7 @@ const {createBigBoard, updateBigBoard} = require('../controllers/bigBoardControl
 
 
 router.post('/', createBigBoard)
-router.put('/:id/player/:id', updateBigBoard)
+router.put('/:bb_id/players/:id', updateBigBoard)
 
 
 module.exports = router;

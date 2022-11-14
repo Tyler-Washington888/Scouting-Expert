@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 
 const bigBoardSchema = mongoose.Schema(
     {
-        creator: {
-            type: mongoose.Schema.type.ObjectId,
+        creatorId: {
+            type: mongoose.Schema.Types.ObjectId,
             required : true,
             ref: 'User'
         },
@@ -14,11 +14,11 @@ const bigBoardSchema = mongoose.Schema(
         },
         rankings: [
             {
-                type: mongoose.Schema.type.ObjectId, 
+                type: mongoose.Schema.Types.ObjectId, 
                 ref: 'Player',
             }
         ]
     }
 )
 
-module.exports = mongoose.Model("bigBoard", bigBoardSchema)
+module.exports = mongoose.model("BigBoard", bigBoardSchema)
