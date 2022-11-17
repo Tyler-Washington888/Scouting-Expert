@@ -153,7 +153,12 @@ const updatePlayer = asyncHandler(async (req, res) => {
         new: true,
     });
 
-    res.status(200).json(updatedPlayer);
+    if (updatedPlayer){
+        res.status(200).json(updatedPlayer);
+      }else{
+         res.status(400);
+         throw new Error("Player update unsuccessful");
+    }
 });
 
 // @desc Delete player 

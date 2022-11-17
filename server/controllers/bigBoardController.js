@@ -2,8 +2,7 @@ const User = require("../models/userModel");
 const Player = require('../models/playerModel')
 const BigBoard = require('../models/bigBoardModel')
 const asyncHandler = require("express-async-handler");
-
-
+ 
 // @desc Create big board 
 // @route POST /bigBoards
 // @access Public
@@ -37,11 +36,12 @@ const createBigBoard = asyncHandler (async (req, res) => {
     }
 });
 
-// @desc Update big board 
+// @desc Updates player ranking in specific big board
 // @route PUT /bigBoards/:bb_id/players/:id
 // @access Public
 
 async function callBigBoard (bigBoardId, playerId, rank) {
+    // find bigBoard and player to update
     const bBoard = await BigBoard.findById(bigBoardId);
     const player = await Player.findById(playerId);
 
@@ -58,7 +58,7 @@ async function callBigBoard (bigBoardId, playerId, rank) {
         }
     }
 
-    // if players exists in rankings array delete them 
+    // if player exists in rankings array delete them 
     for (let i = 0 ; i < bBoard.rankings.length; i++){
         if (bBoard.rankings[i].toString() == player._id.toString()){
             bBoard.rankings.splice(i, 1);
@@ -96,21 +96,21 @@ async function callBigBoard (bigBoardId, playerId, rank) {
 const updateBigBoard = asyncHandler ( async(req, res,) => {
 
     let rank = parseInt(req.body.rank)
-  
-    console.log(rank, req.body.rank)
 
-    if(isNaN(rank)){ 
-        console.log('here')
+    if(isNaN(rank)){
         res.status(400)
         throw new Error("Rank is not a number")
     }
 
+    // decrease rank by 1 to account for arrays being zero indexed
+    // Example: if user wantes to change player's rank from 10(9th index position) to 1(0 index position)
     rank--
 
     if(rank < 0){
         rank = 0
     }
 
+    // helper function used to re sort playerId's in big board ranking's array 
     const bigBoardRankings = await callBigBoard(req.params.bb_id, req.params.id, rank)
 
     if(!bigBoardRankings.status){
@@ -118,6 +118,7 @@ const updateBigBoard = asyncHandler ( async(req, res,) => {
         throw new Error('Error connecting to database')
     }
 
+    // converts each playerId in big board rankings array to object
     const playerObjects = bigBoardRankings.rankings.map( async playerId => await Player.findById(playerId))
 
     Promise.all(playerObjects).then(players => {
@@ -125,11 +126,11 @@ const updateBigBoard = asyncHandler ( async(req, res,) => {
 
         if(!filteredPlayers.length){
             res.status(400)
-            throw new Error('Error connecting to not database')
+            throw new Error('Error connecting to database')
         }
 
         res.status(200).json({rankings: filteredPlayers})
-    }) 
+    })
 })
 
 module.exports = {
