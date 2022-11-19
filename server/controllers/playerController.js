@@ -96,7 +96,7 @@ const getPlayer = asyncHandler(async(req, res) => {
        res.status(200).json(player);
      }else{
         res.status(400);
-        throw new Error("Player not found");
+        throw new Error("Player was not found");
      }
 });
 
