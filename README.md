@@ -1,46 +1,60 @@
-# Getting Started with Create React App and Redux
+# Scouting-Expert
+- [Overview](#overview)
+- [MVP](#mvp)
+  - [Goals](#goals)
+  - [Libraries and Dependencies](#libraries-and-dependencies)
+  - [Client (Front End)](#client-front-end)
+    - [Wireframes](#wireframes)
+    - [Component Tree](#component-tree)
+    - [Component Architecture](#component-architecture)
+    - [Time Estimates](#time-estimates)
+  - [Server (Back End)](#server-back-end)
+    - [ERD Model](#erd-model)
+- [Post-MVP](#post-mvp)
+- [Code Showcase](#code-showcase)
+- [Code Issues & Resolutions](#code-issues--resolutions)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+<br>
 
-## Available Scripts
+## Project Overview
 
-In the project directory, you can run:
+**Scouting-Expert** is a Sports Entertainment Platform that allows users to gain exceptional insight on current NBA prospects. Once users create an account they are granted access to view various big boards where our basketball pundits rank and critigue top players within a specific draft class. Big board and player creation is currently limited to admin but in later versions of this application, users will be able to comment on rankings and critiques, as well as create thier own big boards and prospects.
 
-### `npm start`
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## MVP
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- The Scouting Expert MVP is a full CRUD, full stack application built using MongoDB, Express, React and Node. It is fully responsive, and styled using vanilla CSS.
 
-### `npm test`
+<br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Goals
 
-### `npm run build`
+- Full CRUD, REST API, built with Node
+- Full CRUD interactive front end built with React
+- Forms to create and authenictate users
+- Forms to create and update players
+- Forms to create and update big boards
+- Fully responsive styling with two media queries
+- Clean, organized, and structured code
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Libraries and Dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+|     Library      | Description                                |
+| :--------------: | :----------------------------------------- |
+|   bcryptjs | Password hashing function | 
+|   jsonwebtoken | Standard for secure information sharing between two parties | 
+|   cors | Mechanism that allows servers to indicate origins from which a browser should permit loading resources|
+| colors | color-management system used to style NodeJS console |
+| dotenv | zero-dependency module used to load environment variables from a .env file into process.env. |
+| express | back end web framework used for building RESTful APIs in Node.js |
+| express-async=handler | middleware for handling exceptions inside of async express routes|
+| mongoose | data modeling library used to build schema-based solutions to model application data |  
+<br>
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
