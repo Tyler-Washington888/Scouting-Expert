@@ -50,8 +50,8 @@
 | colors | color-management system used to style NodeJS console |
 | dotenv | zero-dependency module used to load environment variables from a .env file into process.env. |
 | express | back end web framework used for building RESTful APIs in Node.js |
-| express-async=handler | middleware for handling exceptions inside of async express routes|
-| mongoose | data modeling library used to build schema-based solutions to model application data |  
+| express-async-handler | middleware for handling exceptions inside of async express routes|
+| mongoose | data modeling library used to build schema-based solutions to model application data | 
 <br>
 
 
